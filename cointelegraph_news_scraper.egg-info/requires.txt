@@ -1,6 +1,0 @@
-beautifulsoup4
-fastapi
-motor
-playwright
-python-dotenv
-uvicorn

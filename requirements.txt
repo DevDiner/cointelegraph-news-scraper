@@ -1,9 +1,0 @@
-fastapi
-uvicorn
-motor
-beautifulsoup4
-python-dotenv
-playwright
-requests
-pyrogram
-pytz

@@ -1,0 +1,41 @@
+#version: '3.8'
+
+services:
+  mongo:
+    image: mongo:5.0
+    container_name: mongo
+    ports:
+      - "27020:27017"
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: example
+
+  telegram_bot:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - API_ID=${API_ID}
+      - API_HASH=${API_HASH}
+      - PHONE_NUMBER=${PHONE_NUMBER}
+      - NEWS_FETCHER_TYPE=${NEWS_FETCHER_TYPE}
+      - API_NEWS_URL=${API_NEWS_URL}
+      - COINGECKO_BASE_URL=${COINGECKO_BASE_URL}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - SCRAPER_URL=${SCRAPER_URL}
+      - PAGE_LOAD_TIMEOUT=${PAGE_LOAD_TIMEOUT}
+      - PLAYWRIGHT_HEADLESS=${PLAYWRIGHT_HEADLESS}
+      - PLAYWRIGHT_SLOW_MO=${PLAYWRIGHT_SLOW_MO}
+      - MONGO_URI=mongodb://root:example@mongo:27017/
+      - DB_NAME=${DB_NAME}
+      - MONGO_COLLECTION=${MONGO_COLLECTION}
+
+volumes:
+  mongo-data:
+
+
+#Run docker compose up -d

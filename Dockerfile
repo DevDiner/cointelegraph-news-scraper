@@ -24,4 +24,4 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/app/playwright_browsers
 EXPOSE 8080
 
 # Run the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["xvfb-run", "-a", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

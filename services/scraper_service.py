@@ -137,7 +137,8 @@ async def scrape_article(page, url):
 
 async def scrape_all_articles(home_url, max_articles=19):
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False, slow_mo=2000)
+        browser = await p.firefox.launch(headless=False, slow_mo=2000)
+        #browser = await p.chromium.launch(headless=False, slow_mo=2000)
         context = await browser.new_context(viewport={"width": 1280, "height": 900})
         page = await context.new_page()
 
@@ -157,11 +158,24 @@ async def scrape_all_articles(home_url, max_articles=19):
     return latest_articles
 
 async def collect_articles():
-    articles = await scrape_all_articles(config.SCRAPER_URL)
+    logger.info("Starting to collect articles...")
+    
+    try:
+        # Scrape articles from the specified URL
+        articles = await scrape_all_articles(config.SCRAPER_URL)
+        logger.info(f"Scraped {len(articles)} articles from {config.SCRAPER_URL}.")
+        
+    except Exception as e:
+        logger.error(f"Error while scraping articles: {e}")
+        return []
+    
+    # Filter out articles without titles or content
     articles = [article for article in articles if article['title'] and article['content']]
+    logger.info(f"Filtered down to {len(articles)} articles with titles and content.")
 
-    # Sort articles by timestamp (latest first) before inserting into MongoDB
+    # Sort articles by timestamp (latest first)
     sorted_articles = sorted(articles, key=lambda x: x['timestamp'], reverse=True)
+    logger.info("Sorted articles by timestamp.")
 
     inserted_articles = []
 
@@ -174,7 +188,7 @@ async def collect_articles():
                 if article['timestamp'] and isinstance(article['timestamp'], datetime):
                     result = await db.insert_one({
                         **article,
-                        'timestamp': article['timestamp']  # Insert the datetime object
+                        'timestamp': article['timestamp']
                     })
                     logger.info(f"Inserted article: {article['title']} into MongoDB")
                     inserted_articles.append(article)
@@ -183,7 +197,7 @@ async def collect_articles():
             else:
                 logger.info(f"Duplicate article found, not inserting: {article['title']}")
         except Exception as e:
-            logger.error(f"Error inserting article '{article['title']}' : {e}")
+            logger.error(f"Error inserting article '{article['title']}': {e}")
 
     # Prepare the response for FastAPI, convert `datetime` to string
     response_articles = [
@@ -202,6 +216,7 @@ async def collect_articles():
         logger.error(f"Error saving articles to JSON file: {e}")
 
     return response_articles
+
 
 if __name__ == "__main__":
     asyncio.run(collect_articles())

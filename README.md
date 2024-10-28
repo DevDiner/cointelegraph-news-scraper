@@ -19,6 +19,7 @@ A web scraper that fetches the latest articles from Cointelegraph, stores them i
 - FastAPI
 - Motor (async MongoDB driver)
 - Uvicorn
+- xvfb(run in headless)
 
 ## Setup
 
@@ -33,6 +34,7 @@ A web scraper that fetches the latest articles from Cointelegraph, stores them i
     ```bash
     pip install -r requirements.txt
     playwright install
+    sudo apt install -y xvfb
     ```
 
 3. **Configure environment variables**:
@@ -61,7 +63,7 @@ A web scraper that fetches the latest articles from Cointelegraph, stores them i
 5. **Run the FastAPI server**:
     Start the FastAPI server using Uvicorn:
     ```bash
-    uvicorn main:app --reload --host 0.0.0.0 --port 8080
+    xvfb-run -a uvicorn main:app --host 0.0.0.0 --port 8080 --reload
     ```
 
 6. **Access the API**:

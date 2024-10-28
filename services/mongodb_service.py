@@ -18,6 +18,3 @@ class MongoDBService:
 # Instantiate the MongoDB service using configuration values
 db_service = MongoDBService(config.MONGO_URI, config.DB_NAME, config.MONGO_COLLECTION)
 db = db_service.get_collection()
-
-
-

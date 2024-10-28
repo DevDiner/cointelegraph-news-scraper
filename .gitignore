@@ -1,0 +1,28 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+venv
+env/
+venv/
+ENV/
+
+#test files
+/cointelegraph_articles.json
+test-scrape-all-elements.py
+detect_excluded_elements.py
+
+
+#excluded files
+get-pip.py
+
+
+# Ignore build artifacts
+build/

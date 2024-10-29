@@ -16,9 +16,12 @@ ENV/
 
 #test files
 /cointelegraph_articles.json
+*/cointelegraph_articles.json/*
 test-scrape-all-elements.py
 detect_excluded_elements.py
-
+services/test-results/
+services/test_playwright.py
+services/cointelegraph_articles.json
 
 #excluded files
 get-pip.py

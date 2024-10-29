@@ -138,7 +138,7 @@ async def scrape_article(page, url):
 async def scrape_all_articles(home_url, max_articles=19):
     async with async_playwright() as p:
         browser = await p.firefox.launch(headless=False, slow_mo=2000)
-        #browser = await p.chromium.launch(headless=False, slow_mo=2000)
+        #browser = await p.chromium.launch(headless=False, slow_mo=6000, args=["--disable-gpu","--no-sandbox"] )
         context = await browser.new_context(viewport={"width": 1280, "height": 900})
         page = await context.new_page()
 

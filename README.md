@@ -19,7 +19,7 @@ A web scraper that fetches the latest articles from Cointelegraph, stores them i
 - FastAPI
 - Motor (async MongoDB driver)
 - Uvicorn
-- xvfb(run in headless)
+- xvfb (for headless mode)
 
 ## Setup
 
@@ -29,15 +29,46 @@ A web scraper that fetches the latest articles from Cointelegraph, stores them i
     cd cointelegraph-news-scraper
     ```
 
-2. **Install dependencies**:
-    Install the required dependencies via pip:
+2. **Set Up MongoDB**:
+    Ensure MongoDB is set up before proceeding with other dependencies. You can use Docker to set up MongoDB easily. Follow the steps below based on your existing Docker setup.
+
+    ### Case 1: MongoDB Docker Container Already Exists
+    - If you already have a MongoDB container, start it using:
+      ```bash
+      docker start <container_id_or_name>
+      ```
+    - To verify MongoDB is running, execute:
+      ```bash
+      docker ps -a | grep mongo
+      ```
+
+    ### Case 2: MongoDB Docker Image Exists, but No Container
+    - If you have the MongoDB image but no container, create and run a new container using:
+      ```bash
+      docker run -d -p 27017:27017 --name mongo-container mongo:latest
+      ```
+
+    ### Case 3: No MongoDB Image or Container
+    - If you don’t have a MongoDB image or container, pull the MongoDB image and create a container:
+      ```bash
+      docker pull mongo:latest
+      docker run -d -p 27017:27017 --name mongo-container mongo:latest
+      ```
+
+    After setting up MongoDB, it should be accessible at `mongodb://localhost:27017`. You can verify connectivity with:
+    ```bash
+    docker exec -it mongo-container mongosh
+    ```
+
+3. **Install Project Dependencies**:
+    Install the required dependencies using pip and set up Playwright and xvfb:
     ```bash
     pip install -r requirements.txt
     playwright install
     sudo apt install -y xvfb
     ```
 
-3. **Configure environment variables**:
+4. **Configure Environment Variables**:
     Create a `.env` file by copying `.env.example`:
     ```bash
     cp .env.example .env
@@ -54,14 +85,8 @@ A web scraper that fetches the latest articles from Cointelegraph, stores them i
     PLAYWRIGHT_SLOW_MO=2000
     ```
 
-4. **Install Playwright**:
-    Run the following command to install the Playwright browsers:
-    ```bash
-    python -m playwright install
-    ```
-
-5. **Run the FastAPI server**:
-    Start the FastAPI server using Uvicorn:
+5. **Run the FastAPI Server**:
+    Start the FastAPI server using Uvicorn and xvfb:
     ```bash
     xvfb-run -a uvicorn main:app --host 0.0.0.0 --port 8080 --reload
     ```
@@ -70,7 +95,7 @@ A web scraper that fetches the latest articles from Cointelegraph, stores them i
     Navigate to `http://localhost:8080/docs` to view the FastAPI auto-generated documentation.
 
 7. **Run the Scraper via the API**:
-    Scrape articles using the following endpoint:
+    Use the following endpoint to scrape articles:
     ```
     GET /api/v1/scraper/scrape
     ```

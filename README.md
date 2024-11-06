@@ -175,6 +175,25 @@ This project is set up with **GitHub Actions** to automate testing, building, an
 
 ---
 
+## *Improvements to be Implemented*
+
+1. **Modify the API Endpoint to POST Request for Added Security**:
+   - By changing the scraper endpoint from `GET` to `POST`, we add a layer of security. `POST` requests inherently carry an implication of action (i.e., creating, updating, or modifying data), which is more appropriate for triggering actions like scraping. Additionally, `POST` requests are less likely to be cached, ensuring that each scrape request is intentionally made by the client. This approach reduces potential misuse and aligns better with RESTful practices.
+
+2. **Create a cURL Command for External Access and Test with Postman**:
+   - External users can call the API via `cURL` for testing and integration purposes. Below is an example of a cURL command for the scraper endpoint:
+
+     ```bash
+     curl -X POST "http://localhost:8080/api/v1/scraper/scrape" -H "Content-Type: application/json"
+     ```
+
+   - **Testing with Postman**:
+     1. Open Postman and create a new request.
+     2. Set the method to `POST`.
+     3. Enter the URL (e.g., `http://localhost:8080/api/v1/scraper/scrape`).
+     4. Click **Send** to test. Postman will display the response from the API, showing the latest articles in JSON format.
+
+---
 ## Future Improvements
 
 The current project can be further enhanced in several ways:
